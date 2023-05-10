@@ -20,7 +20,7 @@
             <td>{{ course.start_date }}</td>
             <td>{{ course.end_date }}</td>
             <td><a class="btn-action delete-course" data-course-id="{{ course.id }}" href="#">Delete</a></td>
-            <td><a class="btn-action" href="#">Edit</a></td>
+            <td><a class="btn-action" href="{% url 'logic:update-course' course.id %}">Edit</a></td>
         </tr>
         {% endfor %}
 </table>
