@@ -1,0 +1,170 @@
+body {
+    background-color: #000000;
+    color: white;
+}
+
+.margin-top {
+    margin-top: 40px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.gap-10 {
+    gap: 10px;
+}
+
+.gap-20 {
+    gap: 20px;
+}
+
+.padding-10 {
+    padding: 10px;
+}
+
+.stretch {
+    flex: 1;
+}
+
+.flex-row-center {
+    justify-content: center;
+}
+
+.flex-column-center {
+    align-items: center;
+}
+
+.one-line {
+    display: block;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+    margin-top: 60px;
+}
+
+.space-opposite {
+    justify-content: space-between;
+}
+
+.flex-end {
+    justify-content: flex-end;
+    align-items: flex-end;
+    align-content: flex-end;
+}
+
+.btn {
+    background-color: #1e3f60;
+    border: none;
+    width: 150px;
+    height: 45px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+.table-container {
+    height: 500px;
+    overflow:scroll;
+    overflow-x: hidden;
+    border-radius: 30px;
+    background-color: #162636;
+    padding: 15px;
+}
+
+
+table td {
+    height: 40px;
+    text-align: center;
+    border-collapse:separate;
+}
+
+table {
+    width: 100%;
+    border-radius: 10px;
+    border-collapse:separate;
+    border-spacing:0 11px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+ 
+ td {
+    border:2px solid #1e3f60;
+    border-style:solid none;
+    padding:11px;
+    background-color:#1e3f60;
+ }
+ 
+ td:first-child {
+    border-left-style:solid;
+    border-top-left-radius:40px;
+    border-bottom-left-radius:40px;
+ }
+ 
+ td:last-child {
+    border-right-style:solid;
+    border-bottom-right-radius:40px;
+    border-top-right-radius:40px;
+ }
+
+ .search-input {
+    height: 25px;
+    width: 200px;
+    padding: 5px;
+    border-radius: 10px;
+ }
+
+ select {
+    height: 30px;
+    width: 170px;
+    padding: 5px;
+    border-radius: 10px;
+ }
+
+ .btn-action {
+    width: 100px;
+    height: 25px;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #162636;
+ }
+
+ .btn-action:hover {
+    background-color: #090f16;
+ }
+
+
+ /* .button {
+    display: block;
+    width: 115px;
+    height: 25px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    line-height: 25px;
+} */
+
+::-webkit-scrollbar {
+    display: none;
+}

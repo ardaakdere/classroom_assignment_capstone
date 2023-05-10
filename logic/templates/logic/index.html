@@ -1,0 +1,94 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="{% static 'logic/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+    <div class="flex-column gap-20">
+        <div class="flex-row">
+            <button class="btn">Import Data</button>
+            <button class="btn">Add New Course</button>
+        </div>
+        <div class="flex-row flex-column-center space-opposite">
+            <select name="" id="">
+                <option value="">
+                    Sort By Quota +
+                </option>
+                <option value="">
+                    Sort By Quota -
+                </option>
+            </select>
+            <input type="text" name="" id="search-course" class="search-input" placeholder="Search">
+        </div>
+        <div class="table-container">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateTableContent() {
+        $.ajax({
+            url: '{% url "logic:table_content" %}',
+            success: function(data) {
+                $('.table-container').html(data);
+                addDelete();
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(errmsg);
+            }
+        });
+    }
+
+    // Updating the cockpit list when search.
+    $( "#search-course" ).on('input', function() {
+    
+        $.ajax({
+            url: '{% url "logic:table_content" %}?s=' + this.value,
+            success: function(data) {
+                $('.table-container').html(data);
+                addDelete();
+            },
+            error: function(xhr, errmsg, err) {
+            }
+        });
+
+    });
+
+    function addDelete() {
+    var delete_buttons = document.getElementsByClassName('delete-course');
+    for (let i = 0; i < delete_buttons.length; i++) {
+        let delete_button = delete_buttons[i];
+        let courseId = delete_button.getAttribute("data-course-id");
+        delete_button.addEventListener('click', function() {
+            if (confirm("Are you sure you want to delete this course?")) {
+                $.ajax({
+                    url: '{% url "logic:delete_course" %}?course_pk=' + courseId,
+                    success: function(data) {
+                        console.log(courseId);
+                        document.getElementById('search-course').value = ''
+                        updateTableContent();
+                    },
+                    error: function(xhr, errmsg, err) {
+                    }
+                });
+            }
+        });
+    }
+}
+
+updateTableContent();
+
+</script>
+</body>
+</html>
+
