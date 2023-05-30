@@ -12,6 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 </head>
 <body>
+    <div class="flex-column gap-20">
     <div class="container">
     <div class="flex-column gap-20">
         <div class="flex-row">
@@ -33,17 +34,38 @@
 
         </div>
         <div class="flex-row flex-end">
-            <button class="btn">Run Optimization</button>
+            <a href="#result-table" id="run-optimization"><button class="btn">Run Optimization</button></a>
         </div>
     </div>
 </div>
+<div class="container">
+    <h1>RESULT</h1>
+    <div class="flex-column gap-20">
+        <div class="result-container" id="result-table">
+
+        </div>
+    </div>
+</div>
+</div>
 
 <script>
-    function updateTableContent() {
+    function setInputTable() {
         $.ajax({
             url: '{% url "logic:table_content" %}',
             success: function(data) {
-                $('.table-container').html(data);
+                $('.result-container').html(data);
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(errmsg);
+            }
+        });
+    }
+
+    function updateResultContent() {
+        $.ajax({
+            url: '{% url "logic:result_content" %}',
+            success: function(data) {
+                $('.result-container').html(data);
                 addDelete();
             },
             error: function(xhr, errmsg, err) {
@@ -56,9 +78,9 @@
     $( "#search-course" ).on('input', function() {
     
         $.ajax({
-            url: '{% url "logic:table_content" %}?s=' + this.value,
+            url: '{% url "logic:result_content" %}?s=' + this.value,
             success: function(data) {
-                $('.table-container').html(data);
+                $('.result-container').html(data);
                 addDelete();
             },
             error: function(xhr, errmsg, err) {
@@ -73,13 +95,14 @@
         let delete_button = delete_buttons[i];
         let courseId = delete_button.getAttribute("data-course-id");
         delete_button.addEventListener('click', function() {
+            event.preventDefault();
             if (confirm("Are you sure you want to delete this course?")) {
                 $.ajax({
                     url: '{% url "logic:delete_course" %}?course_pk=' + courseId,
                     success: function(data) {
                         console.log(courseId);
                         document.getElementById('search-course').value = ''
-                        updateTableContent();
+                        updateResultContent();
                     },
                     error: function(xhr, errmsg, err) {
                     }
@@ -89,7 +112,16 @@
     }
 }
 
-updateTableContent();
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth"
+        });
+        updateResultContent();
+    });
+});
+
 
 </script>
 </body>

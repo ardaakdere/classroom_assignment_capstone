@@ -1,0 +1,27 @@
+{% load static %}
+<div class="result-container">
+    <table>
+        <tr>
+            <th style="width: 12.5%;">Course Name</th>
+            <th style="width: 12.5%;">Course Code</th>
+            <th style="width: 12.5%;">Classroom</th>
+            <th style="width: 12.5%;">Students Quota</th>
+            <th style="width: 12.5%;">Start Time</th>
+            <th style="width: 12.5%;">End Time</th>
+            <th style="width: 12.5%;">Delete</th>
+            <th style="width: 12.5%;">Edit</th>
+        </tr>
+        {% for course in courses %}
+        <tr>
+            <td>{{ course.course_name }}</td>
+            <td>{{ course.course_code }}</td>
+            <td>{{ course.classroom.classroom_number }}</td>
+            <td>{{ course.students_quota }}</td>
+            <td>{{ course.start_date }}</td>
+            <td>{{ course.end_date }}</td>
+            <td><a class="btn-action delete-course" data-course-id="{{ course.id }}" href="#">Delete</a></td>
+            <td><a class="btn-action" href="{% url 'logic:update-course' course.id %}">Edit</a></td>
+        </tr>
+        {% endfor %}
+</table>
+</div>

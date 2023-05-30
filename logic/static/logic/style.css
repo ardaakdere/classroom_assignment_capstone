@@ -85,6 +85,15 @@ body {
     padding: 15px;
 }
 
+.result-container {
+    height: 500px;
+    overflow:scroll;
+    overflow-x: hidden;
+    border-radius: 30px;
+    background-color: #162636;
+    padding: 15px;
+}
+
 
 table td {
     height: 40px;
