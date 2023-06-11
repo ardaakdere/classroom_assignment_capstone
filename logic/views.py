@@ -23,14 +23,14 @@ class ResultTable(View):
         if search:
             courses = courses.filter(course_name__icontains=search)
 
-        return render(request, 'logic/input_table.html', context = {'courses': courses})
+        return render(request, 'logic/result_table.html', context = {'courses': courses})
 
 
 class InputTable(View):
 
     def get(self, request):
 
-        return render(request, 'logic/result_table.html', context={'courses': []})
+        return render(request, 'logic/input_table.html', context={'courses': []})
 
 
 
