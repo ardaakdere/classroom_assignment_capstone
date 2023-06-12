@@ -16,7 +16,7 @@
     <div class="container">
     <div class="flex-column gap-20">
         <div class="flex-row">
-            <button class="btn">Import Data</button>
+            <button class="btn" id="import-btn">Import Data</button>
             <button class="btn"><a href="{% url 'logic:create-course' %}"> Add New Course</a></button>
         </div>
         <div class="flex-row flex-column-center space-opposite">
@@ -30,8 +30,8 @@
             </select>
             <input type="text" name="" id="search-course" class="search-input" placeholder="Search">
         </div>
-        <div class="table-container">
-
+        <div class="flex-row content-table">
+        {% include "logic/input_tables.html" %}
         </div>
         <div class="flex-row flex-end">
             <a href="#result-table" id="run-optimization"><button class="btn">Run Optimization</button></a>
@@ -47,83 +47,68 @@
     </div>
 </div>
 </div>
-
-<script>
-    function setInputTable() {
-        $.ajax({
-            url: '{% url "logic:table_content" %}',
-            success: function(data) {
-                $('.result-container').html(data);
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(errmsg);
-            }
-        });
-    }
-
-    function updateResultContent() {
-        $.ajax({
-            url: '{% url "logic:result_content" %}',
-            success: function(data) {
-                $('.result-container').html(data);
-                addDelete();
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(errmsg);
-            }
-        });
-    }
-
-    // Updating the cockpit list when search.
-    $( "#search-course" ).on('input', function() {
-    
-        $.ajax({
-            url: '{% url "logic:result_content" %}?s=' + this.value,
-            success: function(data) {
-                $('.result-container').html(data);
-                addDelete();
-            },
-            error: function(xhr, errmsg, err) {
-            }
-        });
-
-    });
-
-    function addDelete() {
-    var delete_buttons = document.getElementsByClassName('delete-course');
-    for (let i = 0; i < delete_buttons.length; i++) {
-        let delete_button = delete_buttons[i];
-        let courseId = delete_button.getAttribute("data-course-id");
-        delete_button.addEventListener('click', function() {
-            event.preventDefault();
-            if (confirm("Are you sure you want to delete this course?")) {
-                $.ajax({
-                    url: '{% url "logic:delete_course" %}?course_pk=' + courseId,
-                    success: function(data) {
-                        console.log(courseId);
-                        document.getElementById('search-course').value = ''
-                        updateResultContent();
-                    },
-                    error: function(xhr, errmsg, err) {
-                    }
-                });
-            }
-        });
-    }
-}
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener("click", function(e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute("href")).scrollIntoView({
-            behavior: "smooth"
-        });
-        updateResultContent();
-    });
-});
-
-
-</script>
 </body>
 </html>
 
+<script>
+    window.onpopstate = function(event) {
+    location.reload();  // sayfayı yeniden yükle
+};
+</script>
+
+<script>
+    function inputTable() {
+        $.ajax({
+            url: '{% url "logic:input-tables" %}',
+            success: function(data) {
+                $('.content-table').html(data);
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(errmsg);
+            }
+        });
+    }
+
+    inputTable();
+</script>
+
+<script>
+    document.getElementById('import-btn').addEventListener('click', function() {
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.xlsx'; // Only accept .xlsx files
+      input.style.display = 'none';
+  
+      input.click();
+  
+      input.addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        console.log('Selected file:', file);
+        
+        // Create a FormData object and append the file
+        var formData = new FormData();
+        formData.append('file', file);
+        
+        // Add the CSRF token to the FormData
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        
+        // Send the file to the backend using AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '{% url "logic:upload-file" %}'); // Replace with your Django URL
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            var response = xhr.responseText;
+            console.log('Response:', response);
+            var jsonResponse = JSON.parse(response);
+            console.log(jsonResponse.success)
+            if (jsonResponse.success) {
+                inputTable();
+            }
+          } else {
+            console.error('Error:', xhr.status);
+          }
+        };
+        xhr.send(formData);
+      });
+    });
+</script>

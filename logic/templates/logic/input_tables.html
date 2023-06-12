@@ -1,0 +1,99 @@
+<div class="table-container stretch">
+<table>
+    <tr>
+        <th style="width: 18.75%;">Course Name</th> <!--OK-->
+        <th style="width: 18.75%;">Course Code</th> <!--OK-->
+        <th style="width: 18.75%;">Course Section</th> <!--OK-->
+        <th style="width: 18.75%;">Registered Student</th>
+        <th style="width: 18.75%;">Course Type</th> <!--OK-->
+        <th style="width: 12.5%;">Delete</th>
+        <th style="width: 12.5%;">Edit</th>
+    </tr>
+    {% for course in courses %}
+    <tr>
+        <td>{{ course.course_name }}</td>
+        <td>{{ course.course_code }}</td>
+        <td>{{ course.course_section }}</td>
+        <td>{{ course.registered_student }}</td>
+        <td>{{ course.course_type }}</td>
+        <td><a class="btn-action delete-course" data-course-id="{{ course.pk }}" href="#">Delete</a></td>
+        <td><a class="btn-action" href="{% url 'logic:edit-course' course.pk %}" target="_parent">Edit</a></td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+<div class="table-container stretch">
+<table>
+    <tr>
+        <th style="width: 25%;">Classroom Code</th> <!--OK-->
+        <th style="width: 25%;">Classroom Quota</th> <!--OK-->
+        <th style="width: 25%;">Classroom Type</th>
+        <th style="width: 12.5%;">Delete</th>
+        <th style="width: 12.5%;">Edit</th>
+    </tr>
+    {% for classroom in classrooms %}
+    <tr>
+        <td>{{ classroom.classroom_code }}</td>
+        <td>{{ classroom.classroom_quota }}</td>
+        <td>{{ classroom.classroom_type }}</td>
+        <td><a class="btn-action delete-classroom" data-classroom-id="{{ classroom.pk }}" href="#">Delete</a></td>
+        <td><a class="btn-action" href="{% url 'logic:edit-classroom' classroom.pk %}">Edit</a></td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $(".delete-course").click(function(e) {
+            e.preventDefault();  // prevent default action
+    
+            let courseId = $(this).data("course-id");  // get course id from data attribute
+    
+            let row = $(this).parents('tr');  // get the parent row of the clicked button
+    
+            $.ajax({
+                url: "/delete-course",  // your endpoint
+                type: "GET",  // method
+                data: {
+                    'course_pk': courseId  // data to send
+                },
+                success: function(response) {
+                    // response handler, remove the row from the table
+                    row.remove();
+                },
+                error: function(xhr) {
+                    // error handler, like showing an error message to the user
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $(".delete-classroom").click(function(e) {
+            e.preventDefault();  // prevent default action
+    
+            let classroomId = $(this).data("classroom-id");  // get course id from data attribute
+    
+            let row = $(this).parents('tr');  // get the parent row of the clicked button
+    
+            $.ajax({
+                url: "/delete-classroom",  // your endpoint
+                type: "GET",  // method
+                data: {
+                    'classroom_pk': classroomId  // data to send
+                },
+                success: function(response) {
+                    // response handler, remove the row from the table
+                    row.remove();
+                },
+                error: function(xhr) {
+                    // error handler, like showing an error message to the user
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+    });
+</script>

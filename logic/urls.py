@@ -5,9 +5,16 @@ app_name = "logic"
 
 urlpatterns = [
     path("", views.Home.as_view(), name="home"),
-    path("table/", views.InputTable.as_view(), name="table_content"),
-    path("result/", views.ResultTable.as_view(), name="result_content"),
-    path("delete-course/", views.course_delete, name="delete_course"),
-    path('update-course/<str:pk>/', views.update_course, name = "update-course"),
+    path("input-tables", views.InputTables.as_view(), name="input-tables"),
+    # COURSE RELATED ENDPOINTS
+    path("delete-course", views.delete_course, name="course-delete"),
+    path('edit-course/<str:pk>/', views.edit_course, name = "edit-course"),
     path('create-course/', views.create_course, name = "create-course"),
+
+    # CLASSROOM RELATED ENDPOINTS
+    path("delete-classroom", views.delete_classroom, name="delete-classroom"),
+    path('edit-classroom/<str:pk>/', views.edit_classroom, name = "edit-classroom"),
+
+
+    path('upload-file/', views.upload_file_view, name='upload-file'),
 ]
