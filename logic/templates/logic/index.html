@@ -18,6 +18,7 @@
         <div class="flex-row">
             <button class="btn" id="import-btn">Import Data</button>
             <button class="btn"><a href="{% url 'logic:create-course' %}"> Add New Course</a></button>
+            <button class="btn"><a href="{% url 'logic:create-classroom' %}"> Add New Classroom</a></button>
         </div>
         <div class="flex-row flex-column-center space-opposite">
             <select name="" id="">
@@ -50,11 +51,6 @@
 </body>
 </html>
 
-<script>
-    window.onpopstate = function(event) {
-    location.reload();  // sayfayı yeniden yükle
-};
-</script>
 
 <script>
     function inputTable() {
@@ -70,6 +66,32 @@
     }
 
     inputTable();
+</script>
+
+<script>
+    document.getElementById('run-optimization').addEventListener('click', function() {
+        $.ajax({
+            url: '{% url "logic:run-optimization" %}',
+            success: function(data) {
+                console.log('çalıştı.')
+                if (data.success) {
+                    console.log('data success başarılı');
+                    $.ajax({
+                        url: '{% url "logic:result-table" %}',
+                        success: function(data) {
+                            $('#result-table').html(data);
+                        },
+                        error: function(xhr, errmsg, err) {
+                            console.log(errmsg);
+                        }
+                    });
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(errmsg);
+            }
+        });
+    });
 </script>
 
 <script>

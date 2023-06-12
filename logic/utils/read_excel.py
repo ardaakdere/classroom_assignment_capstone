@@ -24,14 +24,14 @@ def save_excel_to_database(file_path):
     for index, row in df1.iterrows():
 
         # Extract the first word
-        course_name, course_section = row['course_code'].split()
+        course_code, course_section = row['course_code'].split()
 
         course_section = course_section.replace('(', '')
         course_section = course_section.replace(')', '')
 
         course = Course(
-            course_name=course_name,
-            course_code=row['course_name'],
+            course_name=row['course_name'],
+            course_code=course_code,
             course_section=course_section,
             registered_student=row['student_registered'],  # You might need to adjust this value
             course_type=row['course_type']

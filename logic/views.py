@@ -5,8 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from logic import forms
 import os
 from django.conf import settings
-from logic.utils import read_excel
-from django.views.decorators.cache import cache_control
+from logic.utils import read_excel, gurobi_optimization
 
 # Create your views here.
 class Home(View):
@@ -24,6 +23,17 @@ class InputTables(View):
         courses = models.Course.objects.all()
 
         return render(request, 'logic/input_tables.html', context = {'courses': courses, 'classrooms': classrooms})
+
+
+class ResultTable(View):
+    
+    def get(self, request):
+
+        results = models.Result.objects.all()
+
+        return render(request, 'logic/output_table.html', context = {'results': results})
+
+
 
 # COURSE RELATED FUNCTIONS START #
 def edit_course(request, pk):
@@ -65,7 +75,7 @@ def create_course(request):
 
 def edit_classroom(request, pk):
     classroom = models.Classroom.objects.get(id=pk)
-    form = forms.CourseForm(instance=classroom)
+    form = forms.ClassroomForm(instance=classroom)
     
     if request.method == 'POST':
         form = forms.ClassroomForm(request.POST, instance=classroom)
@@ -86,15 +96,15 @@ def delete_classroom(request):
     return HttpResponse('200')
 
 def create_classroom(request):
-    form = forms.CourseForm()
+    form = forms.ClassroomForm()
     if request.method == 'POST':
-        form = forms.CourseForm(request.POST)
+        form = forms.ClassroomForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('logic:home')
             
     context = {'form' : form}
-    return render(request, 'logic/course_form.html', context)
+    return render(request, 'logic/edit_form.html', context)
 
 # CLASSROOM RELATED FUNCTIONS END #
 
@@ -112,9 +122,14 @@ def upload_file_view(request):
         read_excel.save_excel_to_database(file_path)
         # Example response
         response_data = {'success': True}
-        return JsonResponse(response_data)
+        return JsonResponse(response_data, status=200)
     
     # If the request method is not POST or no file is provided
     response_data = {'message': 'Invalid request'}
     return JsonResponse(response_data, status=400)
 
+
+def run_optimization(request):
+    gurobi_optimization.run_optimization()
+
+    return JsonResponse({'success': True}, status=200)

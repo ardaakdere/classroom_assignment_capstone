@@ -15,7 +15,15 @@
         <td>{{ course.course_code }}</td>
         <td>{{ course.course_section }}</td>
         <td>{{ course.registered_student }}</td>
-        <td>{{ course.course_type }}</td>
+        <td>
+            {% if course.course_type == 1 %}
+                Theoretical Class
+            {% elif course.course_type == 2 %}
+                Computer Class
+            {% elif course.course_type == 3 %}
+                Laboratory
+            {% endif %}
+        </td>
         <td><a class="btn-action delete-course" data-course-id="{{ course.pk }}" href="#">Delete</a></td>
         <td><a class="btn-action" href="{% url 'logic:edit-course' course.pk %}" target="_parent">Edit</a></td>
     </tr>
@@ -36,7 +44,15 @@
     <tr>
         <td>{{ classroom.classroom_code }}</td>
         <td>{{ classroom.classroom_quota }}</td>
-        <td>{{ classroom.classroom_type }}</td>
+        <td>
+            {% if classroom.classroom_type == 1 %}
+                Theoretical Class
+            {% elif classroom.classroom_type == 2 %}
+                Computer Class
+            {% elif classroom.classroom_type == 3 %}
+                Laboratory
+            {% endif %}
+        </td>
         <td><a class="btn-action delete-classroom" data-classroom-id="{{ classroom.pk }}" href="#">Delete</a></td>
         <td><a class="btn-action" href="{% url 'logic:edit-classroom' classroom.pk %}">Edit</a></td>
     </tr>
