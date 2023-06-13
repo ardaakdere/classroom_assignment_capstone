@@ -4,7 +4,7 @@ from logic import models
 class CourseForm(ModelForm):
     class Meta:
         model = models.Course
-        fields = '__all__'
+        fields = ['course_name', 'course_code', 'course_section', 'registered_student']
 
 
 class ClassroomForm(ModelForm):

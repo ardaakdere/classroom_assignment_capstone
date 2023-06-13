@@ -28,15 +28,18 @@ def run_optimization():
 
     # Decision variables
     x = m.addVars(I,K, vtype=GRB.BINARY)
+    mxa = m.addVar()
 
     # Objective function
-    # m.setObjective(0, GRB.MINIMIZE)
+    m.setObjective(mxa, GRB.MINIMIZE)
 
     m.addConstrs((x.sum(i,'*') == 1 for i in I))
 
     m.addConstrs(NS[i] <= sum(x[i,k]*CAP[k] for k in K) for i in I)
 
     m.addConstrs(COT[i] <= sum(x[i,k]*CLT[k] for k in K) for i in I)
+
+    m.addConstrs(x.sum('*',k) <= mxa for k in K)
 
     # Solve
     m.optimize()

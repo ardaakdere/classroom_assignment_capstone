@@ -57,14 +57,10 @@ def chart_data(request):
     for result in results:
         # If this classroom is new, initialize its set of courses
         if result.classroom not in count_dict:
-            count_dict[result.classroom] = set()
+            count_dict[result.classroom] = 0
 
         # Add this course to this classroom's set of courses
-        count_dict[result.classroom].add(result.course_code)
-
-    # Replace sets of courses with their sizes
-    for classroom in count_dict:
-        count_dict[classroom] = len(count_dict[classroom])
+        count_dict[result.classroom] += 1
 
     # Now count_dict contains counts of distinct courses for each classroom
         
