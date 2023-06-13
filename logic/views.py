@@ -6,6 +6,7 @@ from logic import forms
 import os
 from django.conf import settings
 from logic.utils import read_excel, gurobi_optimization
+from django.db.models import Q
 
 # Create your views here.
 class Home(View):
@@ -19,8 +20,19 @@ class InputTables(View):
 
     def get(self, request):
 
+        classroom_search = request.GET.get('classroom_s')
+        course_search = request.GET.get('course_s')
+
         classrooms = models.Classroom.objects.all()
         courses = models.Course.objects.all()
+
+        if classroom_search:
+            print(classroom_search)
+            classrooms = classrooms.filter(classroom_code__icontains=classroom_search)
+
+        if course_search:
+            print(course_search)
+            courses = courses.filter(Q(course_name__icontains=course_search) | Q(course_code__icontains=course_search))
 
         return render(request, 'logic/input_tables.html', context = {'courses': courses, 'classrooms': classrooms})
 
@@ -34,6 +46,31 @@ class ResultTable(View):
         return render(request, 'logic/output_table.html', context = {'results': results})
 
 
+def chart_data(request):
+
+    results = models.Result.objects.all()
+
+    # Initialize an empty dictionary
+    count_dict = {}
+
+    # Iterate over results
+    for result in results:
+        # If this classroom is new, initialize its set of courses
+        if result.classroom not in count_dict:
+            count_dict[result.classroom] = set()
+
+        # Add this course to this classroom's set of courses
+        count_dict[result.classroom].add(result.course_code)
+
+    # Replace sets of courses with their sizes
+    for classroom in count_dict:
+        count_dict[classroom] = len(count_dict[classroom])
+
+    # Now count_dict contains counts of distinct courses for each classroom
+        
+    print(count_dict)
+
+    return JsonResponse(count_dict, status=200)
 
 # COURSE RELATED FUNCTIONS START #
 def edit_course(request, pk):

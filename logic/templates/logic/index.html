@@ -9,7 +9,25 @@
     <title>Document</title>
 
     <link rel="stylesheet" href="{% static 'logic/style.css' %}">
+    <link rel="stylesheet" href="{% static 'logic/searchbar.css' %}">
+    <link rel="stylesheet" href="{% static 'logic/general.css' %}">
+
     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"
+        integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"
+        integrity="sha512-wUYbRPLV5zs6IqvWd88HIqZU/b8TBx+I8LEioQ/UC0t5EMCLApqhIAnUg7EsAzdbhhdgW07TqYDdH3QEXRcPOQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+
 </head>
 <body>
     <div class="flex-column gap-20">
@@ -21,15 +39,14 @@
             <button class="btn"><a href="{% url 'logic:create-classroom' %}"> Add New Classroom</a></button>
         </div>
         <div class="flex-row flex-column-center space-opposite">
-            <select name="" id="">
-                <option value="">
-                    Sort By Quota +
-                </option>
-                <option value="">
-                    Sort By Quota -
-                </option>
-            </select>
-            <input type="text" name="" id="search-course" class="search-input" placeholder="Search">
+            <span class="flex-row gap-0 flex-column-center">
+                <input type="text" name="search-client-campaign" id="search-course-value" placeholder="Search Course" class="searchTerm">
+                <button type="submit" class="searchButton" id="search-course"><span>🔍</span></button>
+            </span>
+            <span class="flex-row gap-0 flex-column-center">
+                <input type="text" name="search-client-campaign" id="search-classroom-value" placeholder="Search Classroom" class="searchTerm">
+                <button type="submit" class="searchButton" id="search-classroom"><span>🔍</span></button>
+            </span>
         </div>
         <div class="flex-row content-table">
         {% include "logic/input_tables.html" %}
@@ -46,11 +63,15 @@
 
         </div>
     </div>
+
+    <canvas id="myChart" style="width:100%;"></canvas>
 </div>
+
 </div>
 </body>
 </html>
 
+<script src="{% static 'logic/js/chart.js' %}"></script>
 
 <script>
     function inputTable() {
@@ -66,6 +87,7 @@
     }
 
     inputTable();
+    invisible_chart();
 </script>
 
 <script>
@@ -80,6 +102,8 @@
                         url: '{% url "logic:result-table" %}',
                         success: function(data) {
                             $('#result-table').html(data);
+                            loadDataChart();
+                            visible_chart();
                         },
                         error: function(xhr, errmsg, err) {
                             console.log(errmsg);
@@ -92,6 +116,36 @@
             }
         });
     });
+</script>
+
+<script>
+    $("#search-classroom").click(function(){
+    var searchTerm = $("#search-classroom-value").val();
+    $.ajax({
+      url: '{% url "logic:input-tables" %}',
+      data: {
+        'classroom_s': searchTerm
+      },
+      success: function(data) {
+        $('.content-table').html(data);
+      }
+    });
+  });
+</script>
+
+<script>
+    $("#search-course").click(function(){
+    var searchTerm = $("#search-course-value").val();
+    $.ajax({
+      url: '{% url "logic:input-tables" %}',
+      data: {
+        'course_s': searchTerm
+      },
+      success: function(data) {
+        $('.content-table').html(data);
+      }
+    });
+  });
 </script>
 
 <script>
@@ -142,7 +196,6 @@
         document.querySelector(this.getAttribute("href")).scrollIntoView({
             behavior: "smooth"
         });
-        updateResultContent();
     });
 });
 </script>

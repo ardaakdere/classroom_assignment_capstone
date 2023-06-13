@@ -21,5 +21,8 @@ urlpatterns = [
     path('run-optimization/', views.run_optimization, name="run-optimization"),
 
 
+    path('chart-data/', views.chart_data, name="chart-data"),
+
+
     path('upload-file/', views.upload_file_view, name='upload-file'),
 ]

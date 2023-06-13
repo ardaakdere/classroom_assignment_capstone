@@ -1,0 +1,32 @@
+.searchTerm {
+    border: 2px solid #15344e !important;
+    border-right: none !important;
+    border-radius: 5px 0 0 5px !important;
+    outline: none !important;
+    height: 40px;
+    width: 170px !important;
+}
+
+.searchButton {
+    width: 40px;
+    height: 40px;  /* Align the height with the searchTerm */
+    border: 1px solid #15344e;
+    background: #15344e;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: -3px;  /* Overlap the button with the input field to hide the right border of the input field */
+}
+
+.searchButton:hover {
+    background: #2a4e6e;
+}
+
+input[type=text], input[type=password] {
+    border-radius: 15px;
+    margin: 3px;
+    padding-left: 10px;
+    height: 35px;
+    width: 250px;
+    border: none;
+}

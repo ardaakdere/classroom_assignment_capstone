@@ -5,7 +5,7 @@ def save_excel_to_database(file_path):
     Classroom.objects.all().delete()
     Course.objects.all().delete()
 
-    df1 = pd.read_excel(file_path, sheet_name="10062023", usecols="A:D", nrows=20)
+    df1 = pd.read_excel(file_path, sheet_name="10062023", usecols="A:D", skiprows=100, nrows=20)
     df2 = pd.read_excel(file_path, sheet_name="10062023", usecols="H:J", nrows=66)
     df1.columns = ['course_code', 'course_name', 'student_registered', 'course_type']
     df2.columns = ['classroom_code', 'classroom_capacity', 'classroom_type']
