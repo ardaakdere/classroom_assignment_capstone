@@ -39,15 +39,32 @@
             cursor: pointer;
         }
 
+        .gap-10 {
+            gap: 10px;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container flex-row">
         <form method="POST" action="" class="center-form">
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Submit" class="btn" />
         </form>
+
+        <div class="flex-column" style="background-color: #1e3f60; border-radius: 5px;">
+            <h3>Course Types</h3>
+            <p>Theoretical: 1</p>
+            <p>Computer: 2</p>
+            <p>Laboratory: 3</p>
+        </div>
     </div>
 </body>
 </html>
